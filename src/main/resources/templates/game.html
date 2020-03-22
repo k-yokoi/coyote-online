@@ -1,0 +1,149 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Coyote</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+
+</head>
+<body>
+<h1>Coyote</h1>
+<p th:text="${roomId}"></p>
+<p id="is_playing"></p>
+<form class="form-inline">
+        <div class="form-group">
+            <label for="name">What is your name?</label>
+            <input type="text" id="name" class="form-control" placeholder="Your name here...">
+        </div>
+        <button id="join" class="btn btn-default" type="submit">Join</button>
+    </form>
+
+<h2>Message</h2>
+<h3 id="message"></h3>
+<h2>Players</h2>
+<ul id="players"></ul>
+<button id="start" class="btn btn-default" type="submit">Start</button>
+<input type="number" id="raise_value" value="1" min="1">
+<button id="raise" class="btn btn-default" type="submit">Raise</button>
+<button id="coyote" class="btn btn-default" type="submit">Coyote</button>
+
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+    const roomId = /*[[${roomId}]]*/
+    if (sessionStorage.getItem('coyote_token'  )) {
+                       $( "#join" ).prop("disabled", true);  
+    }
+
+    $(function() {
+        var POLLLING_INVERVAL_TIME_IN_MILLIS = 1000;//10s
+        (function polling() {
+            getCountUp();
+            window.setTimeout(polling, POLLLING_INVERVAL_TIME_IN_MILLIS);
+        }());
+
+        function getCountUp() {
+            $.ajax({
+                type : "GET",
+                url : "/gameinfo",
+                content : "application/json",
+                data : {roomId: roomId,
+                    token: sessionStorage.getItem('coyote_token')
+                },
+                dataType : "json",
+            }).done(function(data) {
+                console.log(data)
+                if (data.playing) {
+                    $('#is_playing').text("Playing")
+                    $( "#start" ).prop("disabled", true);
+                    $( "#raise_value" ).prop("disabled", false);
+                    $( "#raise" ).prop("disabled", false);
+                    $( "#coyote" ).prop("disabled", false);
+                } else {
+                    $('#is_playing').text("Waiting")
+                    $( "#start" ).prop("disabled", false);
+                    $( "#raise_value" ).prop("disabled", true);
+                    $( "#raise" ).prop("disabled", true);
+                    $( "#coyote" ).prop("disabled", true);
+                }
+                $('#players').children().remove();
+                $.each(data.players, function(i, val){
+                    $("#players").append("<li>" + val.name + ' : ' + val.card + "</li>")
+                })
+                $("#message").text(data.message);//html要素変更する
+            }).fail(function(jqXHR, textStatus) {
+                $("dd").text("error occured");//html要素変更する
+            });
+        }
+    });
+
+    function join() {
+        $( "#join" ).prop("disabled", true);
+        $.ajax({
+            url: "/join",
+            data: {
+                name: $("#name").val(),
+                roomId: roomId
+            }
+        }).then(function(data) {
+            if (data) {
+                console.log(data);
+                sessionStorage.setItem('coyote_token', data)
+            } else {
+                console.log("You can't join.");
+                $( "#join" ).prop("disabled", false);
+            }
+        });
+    }
+
+    function start() {
+        $.ajax({
+            url: "/start",
+            data: {
+                token: sessionStorage.getItem('coyote_token'),
+                roomId: roomId
+            }
+        }).then(function(data) {
+            console.log(data);
+        });
+    }
+
+    function raise() {
+        $.ajax({
+            url: "/raise",
+            data: {
+                token: sessionStorage.getItem('coyote_token'),
+                value: $("#raise_value").val(),
+                roomId: roomId
+            }
+        }).then(function(data) {
+            console.log(data);
+        });
+    }
+
+    function coyote() {
+        $.ajax({
+            url: "/coyote",
+            data: {
+                token: sessionStorage.getItem('coyote_token'),
+                roomId: roomId
+            }
+        }).then(function(data) {
+            console.log(data);
+        });
+    }
+
+    $(function () {
+        $("form").on('submit', function (e) {
+            e.preventDefault();
+        });
+        $( "#join" ).click(function() { join(); });
+        $( "#start" ).click(function() { start(); });
+        $( "#raise" ).click(function() { raise(); });
+        $( "#coyote" ).click(function() { coyote(); });
+    });
+</script>
+</html>
