@@ -37,7 +37,7 @@ public class Cards {
 
     private void setCard(int value, int number) {
         for (int i=0; i<number; i++) {
-            cards.add(new Card(number));
+            cards.add(new Card(value));
             isUsed.add(false);
         }
     }
