@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class StartGameService {
+public class GameMasterService {
     @Autowired
     GameRepository gameRepository;
 
@@ -24,7 +24,11 @@ public class StartGameService {
             return false;
 
         Game game = gameRepository.findByRoomId(roomId).get(0);
-        game.startGame();
+        try {
+            game.startGame();
+        } catch (Exception e) {
+            return false;
+        }
         gameRepository.saveAndFlush(game);
 
         var cards = new Cards();
@@ -32,5 +36,16 @@ public class StartGameService {
         gameRepository.saveAndFlush(game);
         return true;
 
+    }
+    
+    public boolean restartGame(UUID roomId, UUID token){
+        User user = userRepository.findByToken(token).get(0);
+        if (!user.getRoomId().equals(roomId) || !user.isAdmin())
+            return false;
+
+        Game game = gameRepository.findByRoomId(roomId).get(0);
+        game.restartGame();
+        gameRepository.saveAndFlush(game);
+        return true;
     }
 }

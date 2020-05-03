@@ -28,7 +28,7 @@ public class MainRestController {
     GameInfoService gameInfoService;
 
     @Autowired
-    StartGameService startGameService;
+    GameMasterService gameMasterService;
 
     @Autowired
     RaiseGameService raiseGameService;
@@ -48,7 +48,12 @@ public class MainRestController {
 
     @GetMapping("/start")
     public boolean startGame(@RequestParam("roomId") UUID roomId, @RequestParam(value = "token") UUID token) {
-        return startGameService.startGame(roomId, token);
+        return gameMasterService.startGame(roomId, token);
+    }
+
+    @GetMapping("/restart")
+    public boolean restartGame(@RequestParam("roomId") UUID roomId, @RequestParam(value = "token") UUID token) {
+        return gameMasterService.restartGame(roomId, token);
     }
 
     @GetMapping("/raise")
