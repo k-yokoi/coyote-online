@@ -18,7 +18,7 @@ public class GameDTO {
 
     public GameDTO(Game game, UUID token) {
         this.roomId = game.getRoomId();
-        this.isPlaying = game.isPlaying();
+        this.isPlaying = (game.getGameState() == GameState.Playing);
         this.players = game.getUsers().stream()
                 .map(user ->  {
                     if (user.getCardValue()==null) {

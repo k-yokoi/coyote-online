@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Game {
     private @Id @GeneratedValue Long id;
     private final UUID roomId;
-    private boolean isPlaying;
+    private GameState gameState;
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<User> users;
     private String message;
@@ -24,14 +24,14 @@ public class Game {
 
     public Game() {
         this.roomId = UUID.randomUUID();
-        this.isPlaying = false;
+        this.gameState = GameState.Ready;
         this.users = new ArrayList<>();
         this.message = "Please wait for host user to start.";
     }
 
     @Transient
     public boolean canJoin() {
-        if (isPlaying) return false;
+        if (gameState != GameState.Ready) return false;
         if (users.size()>=MAX_USERS) return false;
         return true;
     }
@@ -42,17 +42,24 @@ public class Game {
         return users.add(user);
     }
 
-    public void startGame() {
-        if (!isPlaying)
-            isPlaying = true;
+    public void startGame() throws Exception {
+        if (gameState != GameState.Ready)
+            throw new Exception();
+        gameState = GameState.Playing;
         declareValue = 0;
         turnIndex = 0;
         message = "Game Start! Next, " + users.get(0).getName() + "'s turn. Please raise or coyote.";
     }
 
+    public void restartGame() {
+        gameState = GameState.Ready;
+        this.message = "Please wait for host user to start.";
+    }
+
+
 
     public boolean canRaiseOrCoyote(UUID token) {
-        if (!isPlaying)
+        if (gameState != GameState.Playing)
             return false;
         return token.equals(users.get(turnIndex).getToken());
     }
@@ -83,6 +90,9 @@ public class Game {
     public User coyote(UUID token) {
         if (!canRaiseOrCoyote(token))
             return null;
+
+        gameState = GameState.Ready;
+
         int sumValue = 0;
         for (var user: users)
             sumValue += user.getCardValue();
