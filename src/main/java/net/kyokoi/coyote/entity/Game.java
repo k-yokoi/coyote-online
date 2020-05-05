@@ -20,6 +20,8 @@ public class Game {
     private String message;
     private int declareValue;
     private int turnIndex;
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    private CardDeck cardDeck;
     @Transient
     public static final int MAX_USERS = 12;
 
@@ -28,6 +30,8 @@ public class Game {
         this.gameState = GameState.Ready;
         this.users = new ArrayList<>();
         this.message = "Please wait for host user to start.";
+        this.cardDeck = new CardDeck();
+        this.cardDeck.init();
     }
 
     @Transient
@@ -49,6 +53,9 @@ public class Game {
         gameState = GameState.Playing;
         declareValue = 0;
         turnIndex = 0;
+
+        users.forEach(player -> player.setCard(cardDeck.drawCard()));
+        
         message = "Game Start! Next, " + users.get(0).getName() + "'s turn. Please raise or coyote.";
     }
 
@@ -94,24 +101,33 @@ public class Game {
 
         gameState = GameState.Ready;
 
-        List<Card> cards = users.stream()
-                .map(u -> u.getCard())
-                .collect(Collectors.toList());
+        List<Card> cards = users.stream().map(u -> u.getCard()).collect(Collectors.toList());
+        if (containSecretCard(cards))
+            cards.add(this.cardDeck.drawCard());
         int total = Rule.calculateTotal(cards);
+        cards.forEach(c -> cardDeck.discard(c));
         message = users.get(turnIndex).getName() + " call Coyote! ";
 
         if (total < declareValue) {
             message += users.get(getPrevTurnIndex(turnIndex)).getName() + " loses... ("
-            + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue) + ". "
-                    + "Total is " + Integer.toString(total) + ". )";
+                    + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue)
+                    + ". " + "Total is " + Integer.toString(total) + ". )";
 
             return users.get(getPrevTurnIndex(turnIndex));
         } else {
-            message += users.get(turnIndex).getName() + " loses... ("
-                    + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue) + ". "
-                    + "Total is " + Integer.toString(total) + ". )";
+            message += users.get(turnIndex).getName() + " loses... (" + users.get(getPrevTurnIndex(turnIndex)).getName()
+                    + " raised " + Integer.toString(declareValue) + ". " + "Total is " + Integer.toString(total)
+                    + ". )";
             return users.get(turnIndex);
         }
 
+    }
+    
+    private static boolean containSecretCard(List<Card> cards) {
+        for (Card card: cards)
+            if (card.getCardType().equals(CardType.Secret))
+                return true;
+        
+        return false;
     }
 }

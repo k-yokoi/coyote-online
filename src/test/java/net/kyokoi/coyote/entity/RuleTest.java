@@ -58,6 +58,61 @@ public class RuleTest {
         cards.add(Card.createX2Card());
         cards.add(Card.createMax0Card());
 
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(-4);    
+    }
+
+    @Test
+    void calculateTotalTest_5() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createSecretCard());
+        cards.add(Card.createBasicCard(2));
+
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(18);
+    }
+    
+    @Test
+    void calculateTotalTest_6() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
+        cards.add(Card.createSecretCard());
+        cards.add(Card.createX2Card());
+        
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(36);    
+    }
+
+    @Test
+    void calculateTotalTest_7() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
+        cards.add(Card.createSecretCard());
+        cards.add(Card.createMax0Card());
+
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(-2);
+    }
+    
+    @Test
+    void calculateTotalTest_8() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
+        cards.add(Card.createSecretCard());
+        cards.add(Card.createX2Card());
+        cards.add(Card.createMax0Card());
 
         int total = Rule.calculateTotal(cards);
         assertThat(total).isEqualTo(-4);    

@@ -18,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Card {
+public class Card implements Serializable{
     @Column(nullable=true)
     private String cardString;
     @Column(nullable=true)
@@ -42,4 +42,8 @@ public class Card {
         return Card.builder().cardType(CardType.Max0).cardString("Max->0").build();
     }
     
+    public static Card createSecretCard() {
+        return Card.builder().cardType(CardType.Secret).cardString("?").build();
+    }
+
 }

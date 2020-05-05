@@ -1,6 +1,6 @@
 package net.kyokoi.coyote.service;
 
-import net.kyokoi.coyote.entity.Cards;
+import net.kyokoi.coyote.entity.CardDeck;
 import net.kyokoi.coyote.entity.Game;
 import net.kyokoi.coyote.entity.User;
 import net.kyokoi.coyote.repository.GameRepository;
@@ -27,12 +27,9 @@ public class GameMasterService {
         try {
             game.startGame();
         } catch (Exception e) {
+            e.printStackTrace();;
             return false;
         }
-        gameRepository.saveAndFlush(game);
-
-        var cards = new Cards();
-        game.getUsers().forEach(player -> player.setCard(cards.drawCard()));
         gameRepository.saveAndFlush(game);
         return true;
 
