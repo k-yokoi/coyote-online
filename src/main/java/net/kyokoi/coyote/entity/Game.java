@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -93,21 +94,22 @@ public class Game {
 
         gameState = GameState.Ready;
 
-        int sumValue = 0;
-        for (var user: users)
-            sumValue += user.getCardValue();
+        List<Card> cards = users.stream()
+                .map(u -> new Card(u.getCardValue()))
+                .collect(Collectors.toList());
+        int total = Rule.calculateTotal(cards);
         message = users.get(turnIndex).getName() + " call Coyote! ";
 
-        if (sumValue < declareValue) {
+        if (total < declareValue) {
             message += users.get(getPrevTurnIndex(turnIndex)).getName() + " loses... ("
             + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue) + ". "
-                    + "Total is " + Integer.toString(sumValue) + ". )";
+                    + "Total is " + Integer.toString(total) + ". )";
 
             return users.get(getPrevTurnIndex(turnIndex));
         } else {
             message += users.get(turnIndex).getName() + " loses... ("
                     + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue) + ". "
-                    + "Total is " + Integer.toString(sumValue) + ". )";
+                    + "Total is " + Integer.toString(total) + ". )";
             return users.get(turnIndex);
         }
 
