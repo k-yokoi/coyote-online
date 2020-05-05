@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,15 +50,20 @@ public class Game {
     }
 
     public void startGame() throws Exception {
-        if (gameState != GameState.Ready)
+        if (gameState != GameState.Ready && gameState != GameState.Finish)
             throw new Exception();
+        
+        if (gameState == GameState.Ready) {
+            Random random =  new Random(System.currentTimeMillis());
+            turnIndex = random.nextInt(users.size());
+        }
+
         gameState = GameState.Playing;
         declareValue = 0;
-        turnIndex = 0;
-
+        
         users.forEach(player -> player.setCard(cardDeck.drawCard()));
         
-        message = "Game Start! Next, " + users.get(0).getName() + "'s turn. Please raise or coyote.";
+        message = "Game Start! Next, " + users.get(turnIndex).getName() + "'s turn. Please raise or coyote.";
     }
 
     public void restartGame() {
@@ -99,7 +106,7 @@ public class Game {
         if (!canRaiseOrCoyote(token))
             return null;
 
-        gameState = GameState.Ready;
+        gameState = GameState.Finish;
 
         List<Card> cards = users.stream().map(u -> u.getCard()).collect(Collectors.toList());
         if (containSecretCard(cards))
@@ -117,7 +124,7 @@ public class Game {
             message += users.get(getPrevTurnIndex(turnIndex)).getName() + " loses... ("
                     + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue)
                     + ". " + "Total is " + Integer.toString(total) + ". )";
-
+            turnIndex = getPrevTurnIndex(turnIndex);
             return users.get(getPrevTurnIndex(turnIndex));
         } else {
             message += users.get(turnIndex).getName() + " loses... (" + users.get(getPrevTurnIndex(turnIndex)).getName()
