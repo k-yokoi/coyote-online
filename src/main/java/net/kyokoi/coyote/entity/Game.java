@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -19,6 +20,8 @@ public class Game {
     private String message;
     private int declareValue;
     private int turnIndex;
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    private CardDeck cardDeck;
     @Transient
     public static final int MAX_USERS = 12;
 
@@ -27,6 +30,8 @@ public class Game {
         this.gameState = GameState.Ready;
         this.users = new ArrayList<>();
         this.message = "Please wait for host user to start.";
+        this.cardDeck = new CardDeck();
+        this.cardDeck.init();
     }
 
     @Transient
@@ -48,6 +53,9 @@ public class Game {
         gameState = GameState.Playing;
         declareValue = 0;
         turnIndex = 0;
+
+        users.forEach(player -> player.setCard(cardDeck.drawCard()));
+        
         message = "Game Start! Next, " + users.get(0).getName() + "'s turn. Please raise or coyote.";
     }
 
@@ -93,23 +101,46 @@ public class Game {
 
         gameState = GameState.Ready;
 
-        int sumValue = 0;
-        for (var user: users)
-            sumValue += user.getCardValue();
+        List<Card> cards = users.stream().map(u -> u.getCard()).collect(Collectors.toList());
+        if (containSecretCard(cards))
+            cards.add(this.cardDeck.drawCard());
+        
+        if (containNightCard(cards))
+            cardDeck.init();
+        else
+            cards.forEach(c -> cardDeck.discard(c));
+        
+        int total = Rule.calculateTotal(cards);
         message = users.get(turnIndex).getName() + " call Coyote! ";
 
-        if (sumValue < declareValue) {
+        if (total < declareValue) {
             message += users.get(getPrevTurnIndex(turnIndex)).getName() + " loses... ("
-            + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue) + ". "
-                    + "Total is " + Integer.toString(sumValue) + ". )";
+                    + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue)
+                    + ". " + "Total is " + Integer.toString(total) + ". )";
 
             return users.get(getPrevTurnIndex(turnIndex));
         } else {
-            message += users.get(turnIndex).getName() + " loses... ("
-                    + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue) + ". "
-                    + "Total is " + Integer.toString(sumValue) + ". )";
+            message += users.get(turnIndex).getName() + " loses... (" + users.get(getPrevTurnIndex(turnIndex)).getName()
+                    + " raised " + Integer.toString(declareValue) + ". " + "Total is " + Integer.toString(total)
+                    + ". )";
             return users.get(turnIndex);
         }
 
+    }
+    
+    private static boolean containSecretCard(List<Card> cards) {
+        for (Card card : cards)
+            if (card.getCardType().equals(CardType.Secret))
+                return true;
+
+        return false;
+    }
+    
+    private static boolean containNightCard(List<Card> cards) {
+        for (Card card: cards)
+            if (card.getCardType().equals(CardType.Night))
+                return true;
+        
+        return false;
     }
 }

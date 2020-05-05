@@ -21,7 +21,7 @@ public class GameDTO {
         this.isPlaying = (game.getGameState() == GameState.Playing);
         this.players = game.getUsers().stream()
                 .map(user ->  {
-                    if (user.getCardValue()==null) {
+                    if (user.getCard()==null) {
                         return new Player(user.getName(), user.printCardValue());
                     } else {
                         if (token.equals(user.getToken()))
