@@ -35,9 +35,11 @@ public class Card {
     }
     
     public static Card createX2Card() {
-        return Card.builder()
-                .cardType(CardType.x2)
-                .cardString("x2")
-                .build();
+        return Card.builder().cardType(CardType.x2).cardString("x2").build();
     }
+    
+    public static Card createMax0Card() {
+        return Card.builder().cardType(CardType.Max0).cardString("Max->0").build();
+    }
+    
 }

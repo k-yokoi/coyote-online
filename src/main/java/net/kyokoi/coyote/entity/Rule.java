@@ -15,10 +15,13 @@ public class Rule {
                 .mapToInt(c -> c.getCardValue())
                 .toArray();
 
+        if (containCardType(cards, CardType.Max0)) {
+            int max = Arrays.stream(values).max().getAsInt();
+            values = Arrays.stream(values).map(v -> v == max ? 0 : v).toArray();
+        }
+        
         if (containCardType(cards, CardType.x2)) {
-            values = Arrays.stream(values)
-                    .map(v -> v * 2)
-                    .toArray();
+            values = Arrays.stream(values).map(v -> v * 2).toArray();
         }
 
         return Arrays.stream(values).sum();

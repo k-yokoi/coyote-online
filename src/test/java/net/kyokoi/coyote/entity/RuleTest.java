@@ -35,5 +35,33 @@ public class RuleTest {
         assertThat(total).isEqualTo(36);    
     }
 
+    @Test
+    void calculateTotalTest_3() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
+        cards.add(Card.createMax0Card());
+
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(-2);
+    }
     
+    @Test
+    void calculateTotalTest_4() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
+        cards.add(Card.createX2Card());
+        cards.add(Card.createMax0Card());
+
+
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(-4);    
+    }
+
+
 }
