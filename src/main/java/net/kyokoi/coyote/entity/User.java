@@ -17,7 +17,7 @@ public class User implements Serializable {
     private boolean admin;
     @Setter
     @Column(nullable=true)
-    private Integer cardValue;
+    private Card card;
 
     public User() {}
 
@@ -36,9 +36,9 @@ public class User implements Serializable {
     }
 
     public String printCardValue(){
-        if (cardValue==null)
+        if (card==null)
             return "# No Card";
-        return Integer.toString(cardValue);
+        return Integer.toString(card.getCardValue());
     }
 
 }

@@ -13,15 +13,27 @@ public class RuleTest {
     @Test
     void calculateTotalTest_1() {
         List<Card> cards = new ArrayList<>();
-        cards.add(new Card(20));
-        cards.add(new Card(1));
-        cards.add(new Card(-5));
-        cards.add(new Card(2));
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
 
         int total = Rule.calculateTotal(cards);
         assertThat(total).isEqualTo(18);    
     }
 
+    @Test
+    void calculateTotalTest_2() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(Card.createBasicCard(20));
+        cards.add(Card.createBasicCard(1));
+        cards.add(Card.createBasicCard(-5));
+        cards.add(Card.createBasicCard(2));
+        cards.add(Card.createX2Card());
+
+        int total = Rule.calculateTotal(cards);
+        assertThat(total).isEqualTo(36);    
+    }
 
     
 }

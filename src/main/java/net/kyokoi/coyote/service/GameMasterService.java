@@ -32,7 +32,7 @@ public class GameMasterService {
         gameRepository.saveAndFlush(game);
 
         var cards = new Cards();
-        game.getUsers().forEach(player -> player.setCardValue(cards.drawCard().getValue()));
+        game.getUsers().forEach(player -> player.setCard(cards.drawCard()));
         gameRepository.saveAndFlush(game);
         return true;
 

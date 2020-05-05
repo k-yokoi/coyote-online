@@ -95,7 +95,7 @@ public class Game {
         gameState = GameState.Ready;
 
         List<Card> cards = users.stream()
-                .map(u -> new Card(u.getCardValue()))
+                .map(u -> u.getCard())
                 .collect(Collectors.toList());
         int total = Rule.calculateTotal(cards);
         message = users.get(turnIndex).getName() + " call Coyote! ";

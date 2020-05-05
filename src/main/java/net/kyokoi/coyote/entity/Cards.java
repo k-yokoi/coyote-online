@@ -31,13 +31,14 @@ public class Cards {
         setCard(0, 4);
         setCard(-5, 2);
         setCard(-10, 1);
+        cards.add(Card.createX2Card());
 
         this.cardsSize = cards.size();
     }
 
     private void setCard(int value, int number) {
         for (int i=0; i<number; i++) {
-            cards.add(new Card(value));
+            cards.add(Card.createBasicCard(value));
             isUsed.add(false);
         }
     }
