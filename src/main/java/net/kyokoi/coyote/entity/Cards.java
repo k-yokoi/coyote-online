@@ -32,6 +32,7 @@ public class Cards {
         setCard(-5, 2);
         setCard(-10, 1);
         cards.add(Card.createX2Card());
+        cards.add(Card.createMax0Card());
 
         this.cardsSize = cards.size();
     }
