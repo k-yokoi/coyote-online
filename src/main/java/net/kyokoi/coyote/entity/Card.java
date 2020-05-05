@@ -34,6 +34,10 @@ public class Card implements Serializable{
                 .build();
     }
     
+    public static Card createNightCard() {
+        return Card.builder().cardType(CardType.Night).cardString("0 (Night)").build();
+    }
+
     public static Card createX2Card() {
         return Card.builder().cardType(CardType.x2).cardString("x2").build();
     }
@@ -41,7 +45,7 @@ public class Card implements Serializable{
     public static Card createMax0Card() {
         return Card.builder().cardType(CardType.Max0).cardString("Max->0").build();
     }
-    
+
     public static Card createSecretCard() {
         return Card.builder().cardType(CardType.Secret).cardString("?").build();
     }

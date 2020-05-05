@@ -104,8 +104,13 @@ public class Game {
         List<Card> cards = users.stream().map(u -> u.getCard()).collect(Collectors.toList());
         if (containSecretCard(cards))
             cards.add(this.cardDeck.drawCard());
+        
+        if (containNightCard(cards))
+            cardDeck.init();
+        else
+            cards.forEach(c -> cardDeck.discard(c));
+        
         int total = Rule.calculateTotal(cards);
-        cards.forEach(c -> cardDeck.discard(c));
         message = users.get(turnIndex).getName() + " call Coyote! ";
 
         if (total < declareValue) {
@@ -124,8 +129,16 @@ public class Game {
     }
     
     private static boolean containSecretCard(List<Card> cards) {
-        for (Card card: cards)
+        for (Card card : cards)
             if (card.getCardType().equals(CardType.Secret))
+                return true;
+
+        return false;
+    }
+    
+    private static boolean containNightCard(List<Card> cards) {
+        for (Card card: cards)
+            if (card.getCardType().equals(CardType.Night))
                 return true;
         
         return false;

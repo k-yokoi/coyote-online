@@ -57,9 +57,10 @@ public class CardDeck {
         setCards(Card.createBasicCard(3), 4);
         setCards(Card.createBasicCard(2), 4);
         setCards(Card.createBasicCard(1), 4);
-        setCards(Card.createBasicCard(0), 4);
+        setCards(Card.createBasicCard(0), 3);
         setCards(Card.createBasicCard(-5), 2);
         setCard(Card.createBasicCard(-10));
+        setCard(Card.createNightCard());
         setCard(Card.createX2Card());
         setCard(Card.createMax0Card());
         setCard(Card.createSecretCard());
