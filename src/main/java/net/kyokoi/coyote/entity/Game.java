@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -109,8 +110,15 @@ public class Game {
         gameState = GameState.Finish;
 
         List<Card> cards = users.stream().map(u -> u.getCard()).collect(Collectors.toList());
-        if (containSecretCard(cards))
-            cards.add(this.cardDeck.drawCard());
+
+        Optional<User> secretCardUser = users.stream()
+            .filter(u -> u.getCard().getCardType() == CardType.Secret)
+            .findFirst();
+        if (secretCardUser.isPresent()){
+            Card subCard = this.cardDeck.drawCard();
+            secretCardUser.get().setSubCard(subCard);
+            cards.add(subCard);
+        }
         
         if (containNightCard(cards))
             cardDeck.init();
@@ -135,14 +143,7 @@ public class Game {
 
     }
     
-    private static boolean containSecretCard(List<Card> cards) {
-        for (Card card : cards)
-            if (card.getCardType().equals(CardType.Secret))
-                return true;
-
-        return false;
-    }
-    
+       
     private static boolean containNightCard(List<Card> cards) {
         for (Card card: cards)
             if (card.getCardType().equals(CardType.Night))
