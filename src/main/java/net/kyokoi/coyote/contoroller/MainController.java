@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequestMapping("/game")
 public class MainController {
     @GetMapping("/{roomId}")
-    public String game(@PathVariable("roomId") UUID roomId, Model model) {
+    public String game(@PathVariable("roomId") int roomId, Model model) {
         model.addAttribute("roomId", roomId);
         return "game";
     }

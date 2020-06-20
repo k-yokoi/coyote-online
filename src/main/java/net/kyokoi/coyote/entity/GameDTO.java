@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class GameDTO {
-    private final UUID roomId;
+    private final int roomId;
     private final boolean isPlaying;
     private final List<Player> players;
     private final String message;

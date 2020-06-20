@@ -15,20 +15,16 @@ import java.util.UUID;
 public class User implements Serializable {
     private @Id @GeneratedValue Long id;
     private String name;
-    private UUID roomId;
+    private int roomId;
     private UUID token;
     private boolean admin;
-    @Setter
-    @Column(nullable=true)
-    @Embedded
-    private Card card;
     @Embedded
     @ElementCollection(fetch=FetchType.EAGER)
     private List<Card> cards;
     
     public User() {}
 
-    public User(String name, UUID roomId){
+    public User(String name, int roomId){
         this.name = name;
         this.roomId = roomId;
         this.token = UUID.randomUUID();
@@ -36,7 +32,7 @@ public class User implements Serializable {
         this.cards = new ArrayList<>();
     }
 
-    public User(String name, UUID roomId, boolean admin){
+    public User(String name, int roomId, boolean admin){
         this.name = name;
         this.roomId = roomId;
         this.token = UUID.randomUUID();

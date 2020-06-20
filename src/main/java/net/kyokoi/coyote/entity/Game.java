@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Game {
     private @Id @GeneratedValue Long id;
-    private final UUID roomId;
+    private final int roomId;
     private GameState gameState;
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<User> users;
@@ -29,7 +29,8 @@ public class Game {
     public static final int MAX_USERS = 12;
 
     public Game() {
-        this.roomId = UUID.randomUUID();
+        Random random =  new Random(System.currentTimeMillis());
+        this.roomId = random.nextInt(900000) + 100000;
         this.gameState = GameState.Ready;
         this.users = new ArrayList<>();
         this.message = "Please wait for host user to start.";

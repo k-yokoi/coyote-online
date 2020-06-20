@@ -18,9 +18,9 @@ public class GameMasterService {
     @Autowired
     UserRepository userRepository;
 
-    public boolean startGame(UUID roomId, UUID token) {
+    public boolean startGame(int roomId, UUID token) {
         User user = userRepository.findByToken(token).get(0);
-        if (!user.getRoomId().equals(roomId) || !user.isAdmin())
+        if (user.getRoomId() != roomId || !user.isAdmin())
             return false;
 
         Game game = gameRepository.findByRoomId(roomId).get(0);
@@ -35,9 +35,9 @@ public class GameMasterService {
 
     }
     
-    public boolean restartGame(UUID roomId, UUID token){
+    public boolean restartGame(int roomId, UUID token){
         User user = userRepository.findByToken(token).get(0);
-        if (!user.getRoomId().equals(roomId) || !user.isAdmin())
+        if (user.getRoomId() != roomId || !user.isAdmin())
             return false;
 
         Game game = gameRepository.findByRoomId(roomId).get(0);

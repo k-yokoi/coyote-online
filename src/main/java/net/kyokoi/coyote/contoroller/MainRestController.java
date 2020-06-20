@@ -42,32 +42,32 @@ public class MainRestController {
     }
 
     @GetMapping("/join")
-    public UUID joinGame(@RequestParam("roomId") UUID roomId, @RequestParam(value = "name") String name) {
+    public UUID joinGame(@RequestParam("roomId") int roomId, @RequestParam(value = "name") String name) {
         return joinGameService.joinGame(roomId, name);
     }
 
     @GetMapping("/start")
-    public boolean startGame(@RequestParam("roomId") UUID roomId, @RequestParam(value = "token") UUID token) {
+    public boolean startGame(@RequestParam("roomId") int roomId, @RequestParam(value = "token") UUID token) {
         return gameMasterService.startGame(roomId, token);
     }
 
     @GetMapping("/restart")
-    public boolean restartGame(@RequestParam("roomId") UUID roomId, @RequestParam(value = "token") UUID token) {
+    public boolean restartGame(@RequestParam("roomId") int roomId, @RequestParam(value = "token") UUID token) {
         return gameMasterService.restartGame(roomId, token);
     }
 
     @GetMapping("/raise")
-    public boolean raise(@RequestParam("roomId") UUID roomId, @RequestParam(value = "value") int value, @RequestParam(value = "token") UUID token) {
+    public boolean raise(@RequestParam("roomId") int roomId, @RequestParam(value = "value") int value, @RequestParam(value = "token") UUID token) {
         return raiseGameService.raise(roomId, value, token);
     }
 
     @GetMapping("/coyote")
-    public User coyote(@RequestParam("roomId") UUID roomId, @RequestParam(value = "token") UUID token) {
+    public User coyote(@RequestParam("roomId") int roomId, @RequestParam(value = "token") UUID token) {
         return coyoteGameService.coyote(roomId, token);
     }
 
     @GetMapping("/gameinfo")
-    public GameDTO getGameInfo(@RequestParam("roomId") UUID roomId, @RequestParam(value = "token") UUID token) {
+    public GameDTO getGameInfo(@RequestParam("roomId") int roomId, @RequestParam(value = "token") UUID token) {
         return gameInfoService.getGameInfo(roomId, token);
     }
 
