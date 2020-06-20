@@ -14,7 +14,7 @@ public class GameInfoService {
     @Autowired
     GameRepository gameRepository;
 
-    public GameDTO getGameInfo(UUID roomId, UUID token) {
+    public GameDTO getGameInfo(int roomId, UUID token) {
         List<Game> results = gameRepository.findByRoomId(roomId);
         if (results.size()==0) return null;
 

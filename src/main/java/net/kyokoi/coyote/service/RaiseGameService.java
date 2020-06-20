@@ -12,7 +12,7 @@ public class RaiseGameService {
     @Autowired
     GameRepository gameRepository;
 
-    public boolean raise(UUID roomId, int value, UUID token) {
+    public boolean raise(int roomId, int value, UUID token) {
         Game game = gameRepository.findByRoomId(roomId).get(0);
         if (!game.canRaiseOrCoyote(token))
             return false;

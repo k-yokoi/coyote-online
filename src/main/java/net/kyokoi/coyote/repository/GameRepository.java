@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
-    public List<Game> findByRoomId(UUID roomId);
+    public List<Game> findByRoomId(int roomId);
 
 }

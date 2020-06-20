@@ -13,7 +13,7 @@ public class CoyoteGameService {
     @Autowired
     GameRepository gameRepository;
 
-    public User coyote(UUID roomId, UUID token) {
+    public User coyote(int roomId, UUID token) {
         Game game = gameRepository.findByRoomId(roomId).get(0);
         if (!game.canRaiseOrCoyote(token))
             return null;

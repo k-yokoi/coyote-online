@@ -17,7 +17,7 @@ public class JoinGameService {
     @Autowired
     UserRepository userRepository;
 
-    public UUID joinGame(UUID roomId, String name) {
+    public UUID joinGame(int roomId, String name) {
         Game game = gameRepository.findByRoomId(roomId).get(0);
         if (!game.canJoin()) return null;
 
