@@ -119,8 +119,9 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
     const roomId = /*[[${roomId}]]*/
-        const coyoteRegex = RegExp('Coyote!');
-    let turnRegex = RegExp('Next, ' + sessionStorage.getItem('coyote_name'));
+        let turnRegex = RegExp('Next, ' + sessionStorage.getItem('coyote_name') + "'s");
+    let loseRegex = RegExp('Coyote! ' + sessionStorage.getItem('coyote_name') + " loses");
+    const coyoteRegex = RegExp('Coyote!');
 
 
     if (sessionStorage.getItem('coyote_token') == null) {
@@ -170,16 +171,24 @@
                 $("#message").text(data.message); //html要素変更する
                 if (turnRegex.test(data.message)) {
                     $("#message").removeClass('alert-primary');
+                    $("#message").removeClass('alert-warning');
+                    $("#message").addClass('alert-danger');
                     $("#message").removeClass('alert-success');
-                    $("#message").addClass("alert-danger");
+                } else if (loseRegex.test(data.message)) {
+                    $("#message").removeClass('alert-primary');
+                    $("#message").addClass('alert-warning');
+                    $("#message").removeClass('alert-danger');
+                    $("#message").removeClass('alert-success');
                 } else if (coyoteRegex.test(data.message)) {
                     $("#message").removeClass('alert-primary');
+                    $("#message").removeClass('alert-warning');
                     $("#message").removeClass('alert-danger');
-                    $("#message").addClass("alert-warning");
+                    $("#message").addClass('alert-success');
                 } else {
-                    $("#message").removeClass('alert-success');
+                    $("#message").addClass('alert-primary');
+                    $("#message").removeClass('alert-warning');
                     $("#message").removeClass('alert-danger');
-                    $("#message").addClass("alert-primary");
+                    $("#message").removeClass('alert-success');
                 }
 
             }).fail(function(jqXHR, textStatus) {
@@ -211,7 +220,8 @@
                 console.log(data);
                 sessionStorage.setItem('coyote_token', data);
                 sessionStorage.setItem('coyote_name', $("#name").val());
-                turnRegex = RegExp('Next, ' + $("#name").val())
+                turnRegex = RegExp('Next, ' + $("#name").val() + "'s'")
+                loseRegex = RegExp('Coyote! ' + $("#name").val() + " loses");
                 $('#staticBackdrop').modal('hide');
             } else {
                 console.log("You can't join.");
