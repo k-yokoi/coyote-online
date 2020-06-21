@@ -17,6 +17,7 @@ public class RaiseGameService {
         if (!game.canRaiseOrCoyote(token))
             return false;
         game.raise(value, token);
+        game.incrementVersion();
         gameRepository.save(game);
 
         return true;

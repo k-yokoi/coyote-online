@@ -18,6 +18,7 @@ public class CoyoteGameService {
         if (!game.canRaiseOrCoyote(token))
             return null;
         User loosePlayer = game.coyote(token);
+        game.incrementVersion();
         gameRepository.save(game);
         return loosePlayer;
     }

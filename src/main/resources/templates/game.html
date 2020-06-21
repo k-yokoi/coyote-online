@@ -21,6 +21,9 @@
         <button id="exit_toggle" type="button" class="btn btn-outline-danger mb-2" data-toggle="modal" data-target="#exampleModal2">
             Exit
         </button>
+        <button type="button" class="btn btn-outline-info mb-2 float-sm-right" data-toggle="modal" data-target="#exampleModal3">
+            Info
+        </button>
 
         <h2>Declared value</h2>
         <h3 id="declared_value"></h3>
@@ -110,6 +113,80 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel3">Card Info</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-sm text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Card</th>
+                                    <th scope="col">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">20</th>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">15</th>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">10</th>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">1 ~ 5</th>
+                                    <td>4</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">0</th>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">0 (Night)</th>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">-5</th>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">-10</th>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">x2</th>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Max->0</th>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">?</th>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -119,14 +196,16 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
     const roomId = /*[[${roomId}]]*/
-        const coyoteRegex = RegExp('Coyote!');
-    let turnRegex = RegExp('Next, ' + sessionStorage.getItem('coyote_name'));
+        let turnRegex = RegExp('Next, ' + sessionStorage.getItem('coyote_name') + "'s");
+    let loseRegex = RegExp('Coyote! ' + sessionStorage.getItem('coyote_name') + " loses");
+    const coyoteRegex = RegExp('Coyote!');
 
 
     if (sessionStorage.getItem('coyote_token') == null) {
         $('#staticBackdrop').modal('show')
     }
 
+    var version = null
     $(function() {
         var POLLLING_INVERVAL_TIME_IN_MILLIS = 1000; //10s
         (function polling() {
@@ -137,56 +216,81 @@
         function getCountUp() {
             $.ajax({
                 type: "GET",
-                url: "/gameinfo",
-                content: "application/json",
-                data: {
-                    roomId: roomId,
-                    token: sessionStorage.getItem('coyote_token')
-                },
-                dataType: "json",
+                url: "/ver/" + roomId,
+                dataType: "text",
             }).done(function(data) {
+                if (data != version) {
+                    getGameInfo();
+                    version = data;
+                }
                 console.log(data)
-                if (data.playing) {
-                    $('#is_playing').text("Playing")
-                    $("#start").prop("disabled", true);
-                    $("#exit_toggle").prop("disabled", true);
-                    $("#raise_value").prop("disabled", false);
-                    $("#raise").prop("disabled", false);
-                    $("#coyote").prop("disabled", false);
-                } else {
-                    $('#is_playing').text("Waiting")
-                    $("#start").prop("disabled", false);
-                    $("#exit_toggle").prop("disabled", false);
-                    $("#raise_value").prop("disabled", true);
-                    $("#raise").prop("disabled", true);
-                    $("#coyote").prop("disabled", true);
-                }
-                $('#players').children().remove();
-                $.each(data.players, function(i, val) {
-                    $("#players").append('<tr><th scope="row">' + h(val.name) + '</th><td>' + val.card + '</td></tr>')
-                })
-                var declared_value = parseInt(data.value, 10)
-                $("#declared_value").text(data.value); //html要素変更する
-                $("#message").text(data.message); //html要素変更する
-                if (turnRegex.test(data.message)) {
-                    $("#message").removeClass('alert-primary');
-                    $("#message").removeClass('alert-success');
-                    $("#message").addClass("alert-danger");
-                } else if (coyoteRegex.test(data.message)) {
-                    $("#message").removeClass('alert-primary');
-                    $("#message").removeClass('alert-danger');
-                    $("#message").addClass("alert-warning");
-                } else {
-                    $("#message").removeClass('alert-success');
-                    $("#message").removeClass('alert-danger');
-                    $("#message").addClass("alert-primary");
-                }
-
             }).fail(function(jqXHR, textStatus) {
-                $("dd").text("error occured"); //html要素変更する
+                console.log(jqXHR);
+                console.log(textStatus);
             });
         }
     });
+
+    function getGameInfo() {
+        $.ajax({
+            type: "GET",
+            url: "/gameinfo",
+            content: "application/json",
+            data: {
+                roomId: roomId,
+                token: sessionStorage.getItem('coyote_token')
+            },
+            dataType: "json",
+        }).done(function(data) {
+            console.log(data)
+            if (data.playing) {
+                $('#is_playing').text("Playing")
+                $("#start").prop("disabled", true);
+                $("#exit_toggle").prop("disabled", true);
+                $("#raise_value").prop("disabled", false);
+                $("#raise").prop("disabled", false);
+                $("#coyote").prop("disabled", false);
+            } else {
+                $('#is_playing').text("Waiting")
+                $("#start").prop("disabled", false);
+                $("#exit_toggle").prop("disabled", false);
+                $("#raise_value").prop("disabled", true);
+                $("#raise").prop("disabled", true);
+                $("#coyote").prop("disabled", true);
+            }
+            $('#players').children().remove();
+            $.each(data.players, function(i, val) {
+                $("#players").append('<tr><th scope="row">' + h(val.name) + '</th><td>' + val.card + '</td></tr>')
+            })
+            var declared_value = parseInt(data.value, 10)
+            $("#declared_value").text(data.value); //html要素変更する
+            $("#message").text(data.message); //html要素変更する
+            if (turnRegex.test(data.message)) {
+                $("#message").removeClass('alert-primary');
+                $("#message").removeClass('alert-warning');
+                $("#message").addClass('alert-danger');
+                $("#message").removeClass('alert-success');
+            } else if (loseRegex.test(data.message)) {
+                $("#message").removeClass('alert-primary');
+                $("#message").addClass('alert-warning');
+                $("#message").removeClass('alert-danger');
+                $("#message").removeClass('alert-success');
+            } else if (coyoteRegex.test(data.message)) {
+                $("#message").removeClass('alert-primary');
+                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-danger');
+                $("#message").addClass('alert-success');
+            } else {
+                $("#message").addClass('alert-primary');
+                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-danger');
+                $("#message").removeClass('alert-success');
+            }
+
+        }).fail(function(jqXHR, textStatus) {
+            $("dd").text("error occured"); //html要素変更する
+        });
+    }
 
     function h(str) {
         return String(str).replace(/&/g, "&amp;")
@@ -211,7 +315,8 @@
                 console.log(data);
                 sessionStorage.setItem('coyote_token', data);
                 sessionStorage.setItem('coyote_name', $("#name").val());
-                turnRegex = RegExp('Next, ' + $("#name").val())
+                turnRegex = RegExp('Next, ' + $("#name").val() + "'s'")
+                loseRegex = RegExp('Coyote! ' + $("#name").val() + " loses");
                 $('#staticBackdrop').modal('hide');
             } else {
                 console.log("You can't join.");
