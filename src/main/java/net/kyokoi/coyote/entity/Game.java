@@ -84,9 +84,9 @@ public class Game {
     public boolean raise(int value, UUID token) {
         if (!canRaiseOrCoyote(token))
             return false;
-        if (value <= declareValue)
+        if (value < 1)
             return false;
-        this.declareValue = value;
+        this.declareValue += value;
         message = users.get(turnIndex).getName() + " raised " + Integer.toString(value) + ". ";
         turnIndex = getNextTurnIndex(turnIndex);
         message += "Next, " + users.get(turnIndex).getName() + "'s turn. Please raise or coyote.";

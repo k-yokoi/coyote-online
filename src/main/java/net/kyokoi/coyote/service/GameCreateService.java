@@ -19,6 +19,7 @@ public class GameCreateService {
     UserRepository userRepository;
 
     public Game createGame(String name) {
+        if (name.equals("")) return null;
         Game game = new Game();
         User user = new User(name, game.getRoomId(), true);
         game.addUser(user);
