@@ -25,6 +25,7 @@ public class JoinGameService {
         User user = new User(name, game.getRoomId());
         userRepository.save(user);
         game.addUser(user);
+        game.incrementVersion();
         gameRepository.save(game);
         return user.getToken();
     }

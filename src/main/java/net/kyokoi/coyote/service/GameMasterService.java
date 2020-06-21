@@ -30,6 +30,7 @@ public class GameMasterService {
             e.printStackTrace();;
             return false;
         }
+        game.incrementVersion();
         gameRepository.saveAndFlush(game);
         return true;
 
@@ -42,6 +43,7 @@ public class GameMasterService {
 
         Game game = gameRepository.findByRoomId(roomId).get(0);
         game.restartGame();
+        game.incrementVersion();
         gameRepository.saveAndFlush(game);
         return true;
     }

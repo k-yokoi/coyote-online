@@ -6,6 +6,7 @@ import net.kyokoi.coyote.entity.User;
 import net.kyokoi.coyote.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,6 +70,11 @@ public class MainRestController {
     @GetMapping("/gameinfo")
     public GameDTO getGameInfo(@RequestParam("roomId") int roomId, @RequestParam(value = "token") UUID token) {
         return gameInfoService.getGameInfo(roomId, token);
+    }
+
+    @GetMapping("/ver/{roomId}")
+    public Integer getGameInfo(@PathVariable("roomId") int roomId) {
+        return gameInfoService.getVersion(roomId);
     }
 
 

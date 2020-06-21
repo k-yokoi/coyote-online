@@ -25,6 +25,7 @@ public class Game {
     private int turnIndex;
     @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     private CardDeck cardDeck;
+    private int version;
     @Transient
     public static final int MAX_USERS = 12;
 
@@ -36,6 +37,11 @@ public class Game {
         this.message = "Please wait for host user to start.";
         this.cardDeck = new CardDeck();
         this.cardDeck.init();
+        this.version = 0;
+    }
+
+    public void incrementVersion(){
+        this.version++;
     }
 
     @Transient
@@ -143,6 +149,7 @@ public class Game {
         }
 
     }
+
     
        
     private static boolean containNightCard(List<Card> cards) {

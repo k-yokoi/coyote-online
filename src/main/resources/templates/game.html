@@ -205,6 +205,7 @@
         $('#staticBackdrop').modal('show')
     }
 
+    var version = null
     $(function() {
         var POLLLING_INVERVAL_TIME_IN_MILLIS = 1000; //10s
         (function polling() {
@@ -215,64 +216,81 @@
         function getCountUp() {
             $.ajax({
                 type: "GET",
-                url: "/gameinfo",
-                content: "application/json",
-                data: {
-                    roomId: roomId,
-                    token: sessionStorage.getItem('coyote_token')
-                },
-                dataType: "json",
+                url: "/ver/" + roomId,
+                dataType: "text",
             }).done(function(data) {
+                if (data != version) {
+                    getGameInfo();
+                    version = data;
+                }
                 console.log(data)
-                if (data.playing) {
-                    $('#is_playing').text("Playing")
-                    $("#start").prop("disabled", true);
-                    $("#exit_toggle").prop("disabled", true);
-                    $("#raise_value").prop("disabled", false);
-                    $("#raise").prop("disabled", false);
-                    $("#coyote").prop("disabled", false);
-                } else {
-                    $('#is_playing').text("Waiting")
-                    $("#start").prop("disabled", false);
-                    $("#exit_toggle").prop("disabled", false);
-                    $("#raise_value").prop("disabled", true);
-                    $("#raise").prop("disabled", true);
-                    $("#coyote").prop("disabled", true);
-                }
-                $('#players').children().remove();
-                $.each(data.players, function(i, val) {
-                    $("#players").append('<tr><th scope="row">' + h(val.name) + '</th><td>' + val.card + '</td></tr>')
-                })
-                var declared_value = parseInt(data.value, 10)
-                $("#declared_value").text(data.value); //html要素変更する
-                $("#message").text(data.message); //html要素変更する
-                if (turnRegex.test(data.message)) {
-                    $("#message").removeClass('alert-primary');
-                    $("#message").removeClass('alert-warning');
-                    $("#message").addClass('alert-danger');
-                    $("#message").removeClass('alert-success');
-                } else if (loseRegex.test(data.message)) {
-                    $("#message").removeClass('alert-primary');
-                    $("#message").addClass('alert-warning');
-                    $("#message").removeClass('alert-danger');
-                    $("#message").removeClass('alert-success');
-                } else if (coyoteRegex.test(data.message)) {
-                    $("#message").removeClass('alert-primary');
-                    $("#message").removeClass('alert-warning');
-                    $("#message").removeClass('alert-danger');
-                    $("#message").addClass('alert-success');
-                } else {
-                    $("#message").addClass('alert-primary');
-                    $("#message").removeClass('alert-warning');
-                    $("#message").removeClass('alert-danger');
-                    $("#message").removeClass('alert-success');
-                }
-
             }).fail(function(jqXHR, textStatus) {
-                $("dd").text("error occured"); //html要素変更する
+                console.log(jqXHR);
+                console.log(textStatus);
             });
         }
     });
+
+    function getGameInfo() {
+        $.ajax({
+            type: "GET",
+            url: "/gameinfo",
+            content: "application/json",
+            data: {
+                roomId: roomId,
+                token: sessionStorage.getItem('coyote_token')
+            },
+            dataType: "json",
+        }).done(function(data) {
+            console.log(data)
+            if (data.playing) {
+                $('#is_playing').text("Playing")
+                $("#start").prop("disabled", true);
+                $("#exit_toggle").prop("disabled", true);
+                $("#raise_value").prop("disabled", false);
+                $("#raise").prop("disabled", false);
+                $("#coyote").prop("disabled", false);
+            } else {
+                $('#is_playing').text("Waiting")
+                $("#start").prop("disabled", false);
+                $("#exit_toggle").prop("disabled", false);
+                $("#raise_value").prop("disabled", true);
+                $("#raise").prop("disabled", true);
+                $("#coyote").prop("disabled", true);
+            }
+            $('#players').children().remove();
+            $.each(data.players, function(i, val) {
+                $("#players").append('<tr><th scope="row">' + h(val.name) + '</th><td>' + val.card + '</td></tr>')
+            })
+            var declared_value = parseInt(data.value, 10)
+            $("#declared_value").text(data.value); //html要素変更する
+            $("#message").text(data.message); //html要素変更する
+            if (turnRegex.test(data.message)) {
+                $("#message").removeClass('alert-primary');
+                $("#message").removeClass('alert-warning');
+                $("#message").addClass('alert-danger');
+                $("#message").removeClass('alert-success');
+            } else if (loseRegex.test(data.message)) {
+                $("#message").removeClass('alert-primary');
+                $("#message").addClass('alert-warning');
+                $("#message").removeClass('alert-danger');
+                $("#message").removeClass('alert-success');
+            } else if (coyoteRegex.test(data.message)) {
+                $("#message").removeClass('alert-primary');
+                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-danger');
+                $("#message").addClass('alert-success');
+            } else {
+                $("#message").addClass('alert-primary');
+                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-danger');
+                $("#message").removeClass('alert-success');
+            }
+
+        }).fail(function(jqXHR, textStatus) {
+            $("dd").text("error occured"); //html要素変更する
+        });
+    }
 
     function h(str) {
         return String(str).replace(/&/g, "&amp;")

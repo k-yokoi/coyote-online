@@ -20,4 +20,11 @@ public class GameInfoService {
 
         return new GameDTO(results.get(0), token);
     }
+
+    public Integer getVersion(int roomId) {
+        List<Game> results = gameRepository.findByRoomId(roomId);
+        if (results.size()==0) return null;
+
+        return results.get(0).getVersion();
+    }
 }
