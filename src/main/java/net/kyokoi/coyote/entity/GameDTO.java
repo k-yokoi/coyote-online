@@ -15,11 +15,13 @@ public class GameDTO {
     private final boolean isPlaying;
     private final List<Player> players;
     private final String message;
+    private final int value;
 
     public GameDTO(Game game, UUID token) {
         this.roomId = game.getRoomId();
         this.isPlaying = (game.getGameState() == GameState.Playing);
         this.message = game.getMessage();
+        this.value = game.getDeclareValue();
         if (game.getGameState() == GameState.Ready) {
             this.players = game.getUsers().stream()
             .map(user ->  new Player(user.getName(), "# No Card"))

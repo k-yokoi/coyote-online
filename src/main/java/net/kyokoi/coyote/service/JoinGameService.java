@@ -20,6 +20,7 @@ public class JoinGameService {
     public UUID joinGame(int roomId, String name) {
         Game game = gameRepository.findByRoomId(roomId).get(0);
         if (!game.canJoin()) return null;
+        if (name.equals("")) return null;
 
         User user = new User(name, game.getRoomId());
         userRepository.save(user);
