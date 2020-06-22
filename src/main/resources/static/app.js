@@ -21,8 +21,10 @@ function sendName() {
     }).then(function(data) {
         if (data) {
             console.log(data)
+            sessionStorage.setItem('coyote_room', data.roomId);
             sessionStorage.setItem('coyote_token', data.users[0].token);
             sessionStorage.setItem('coyote_name', $("#name").val());
+            sessionStorage.setItem('coyote_gm', true);
             console.log(sessionStorage.getItem('coyote_token'))
             const joinUrl = hostname + '/game/' + data.roomId;
             $('a').attr('href', joinUrl);
@@ -53,8 +55,10 @@ function join() {
     }).then(function(data) {
         if (data) {
             console.log(data);
+            sessionStorage.setItem('coyote_room', $("#room_id").val())
             sessionStorage.setItem('coyote_token', data)
             sessionStorage.setItem('coyote_name', $("#enter_name").val());
+            sessionStorage.removeItem('coyote_gm');
             console.log(sessionStorage.getItem('coyote_token'))
             const joinUrl = hostname + '/game/' + $("#room_id").val();
             $('a').attr('href', joinUrl);
