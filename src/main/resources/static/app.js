@@ -31,7 +31,7 @@ function sendName() {
             location.href = '/game/' + data.roomId;
         } else {
             console.log("You can't join.");
-            $("#message1").text("Name Error")
+            $("#message1").text("名前が入力されていません")
             $("#message1").addClass("alert")
             $("#message1").addClass("alert-danger")
         }
@@ -48,7 +48,7 @@ function join() {
         },
         error: function(e) {
             console.log(e);
-            $("#message2").text("Room ID or Name Error")
+            $("#message2").text("ルームIDが正しくないか、名前が入力されていません")
             $("#message2").addClass("alert")
             $("#message2").addClass("alert-danger")
         }
@@ -65,7 +65,7 @@ function join() {
             location.href = '/game/' + $("#room_id").val();
         } else {
             console.log("You can't join.");
-            $("#message2").text("Room ID or Name Error")
+            $("#message2").text("ルームIDが正しくないか、名前が入力されていません")
             $("#message2").addClass("alert")
             $("#message2").addClass("alert-danger")
         }

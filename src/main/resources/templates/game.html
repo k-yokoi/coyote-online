@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -9,40 +9,40 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <title>Coyote</title>
+    <title>コヨーテ</title>
     <link href="/main.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container" style="max-width: 720px">
-        <h1 class="mt-3">Coyote</h1>
-        <p>Room ID: <span th:text="${roomId}"></span></p>
-        <button id="start" type="button" class="btn btn-outline-primary mb-2" disabled aria-disabled="true">Start</button>
+        <h1 class="mt-3">コヨーテ</h1>
+        <p>ルームID: <span th:text="${roomId}"></span></p>
+        <button id="start" type="button" class="btn btn-outline-primary mb-2" disabled aria-disabled="true">スタート</button>
         <button id="exit_toggle" type="button" class="btn btn-outline-danger mb-2" data-toggle="modal" data-target="#exampleModal2">
-            Exit
+            退出
         </button>
 
-        <h2>Declared value</h2>
+        <h2>宣言された数</h2>
         <h3 id="declared_value"></h3>
-        <h2>Message</h2>
+        <h2>メッセージ</h2>
         <div id="message" class="alert alert-primary" role="alert"></div>
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Player</th>
-                    <th scope="col">Card</th>
+                    <th scope="col">プレイヤー</th>
+                    <th scope="col">カード</th>
                 </tr>
             </thead>
             <tbody id="players"></tbody>
         </table>
 
         <button id="raise" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#exampleModal">
-                Raise
+                アゲル
             </button>
-        <button id="coyote" class="btn btn-warning btn-lg" type="submit">Coyote</button>
+        <button id="coyote" class="btn btn-warning btn-lg" type="submit">コヨーテ</button>
 
         <button type="button" class="btn btn-outline-info btn-lg float-right" data-toggle="modal" data-target="#exampleModal3">
-            Info
+            ？
         </button>
 
         <!-- Modal -->
@@ -50,7 +50,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">How much do you raise?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">いくつ上げますか？</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -61,8 +61,8 @@
                         <div id="display"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="raise_execute" type="button" class="btn btn-primary">Raise</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">とじる</button>
+                        <button id="raise_execute" type="button" class="btn btn-primary">アゲル</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Join Room</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">ルームに入る</h5>
                         <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -81,14 +81,14 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="name">What is your name?</label>
-                                <input type="text" class="form-control" id="name" placeholder="Your name here...">
+                                <label for="name">名前</label>
+                                <input type="text" class="form-control" id="name" placeholder="">
                             </div>
                         </form>
                         <div id="message2" role="alert"></div>
                     </div>
                     <div class="modal-footer">
-                        <button id="join" type="button" class="btn btn-primary">Join</button>
+                        <button id="join" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
@@ -99,17 +99,17 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Do you want to Exit?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel2">本当に退出しますか？</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Once you exit, you can't go back this room.
+                        一度退出すると、このゲームに戻ってこれません。本当に退出していいですか？
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button id="exit" type="button" class="btn btn-danger">Yes, EXIT</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">もどる</button>
+                        <button id="exit" type="button" class="btn btn-danger">はい。退出します</button>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel3">Card Info</h5>
+                        <h5 class="modal-title" id="exampleModalLabel3">カードの枚数</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -285,9 +285,9 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
     const roomId = /*[[${roomId}]]*/
-        let turnRegex = RegExp('Next, ' + sessionStorage.getItem('coyote_name') + "'s");
-    let loseRegex = RegExp('Coyote! ' + sessionStorage.getItem('coyote_name') + " loses");
-    const coyoteRegex = RegExp('Coyote!');
+        let turnRegex = RegExp('次は ' + sessionStorage.getItem('coyote_name') + " のターンです。");
+    let loseRegex = RegExp('コヨーテしました！ ' + sessionStorage.getItem('coyote_name') + " の負けです");
+    const coyoteRegex = RegExp('コヨーテしました！');
 
 
     if (sessionStorage.getItem('coyote_room') != roomId) {
@@ -359,24 +359,24 @@
             }
             if (turnRegex.test(data.message)) {
                 $("#message").removeClass('alert-primary');
-                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-dark');
                 $("#message").addClass('alert-danger');
-                $("#message").removeClass('alert-success');
+                $("#message").removeClass('alert-warning');
             } else if (loseRegex.test(data.message)) {
                 $("#message").removeClass('alert-primary');
-                $("#message").addClass('alert-warning');
+                $("#message").addClass('alert-dark');
                 $("#message").removeClass('alert-danger');
-                $("#message").removeClass('alert-success');
+                $("#message").removeClass('alert-warning');
             } else if (coyoteRegex.test(data.message)) {
                 $("#message").removeClass('alert-primary');
-                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-dark');
                 $("#message").removeClass('alert-danger');
-                $("#message").addClass('alert-success');
+                $("#message").addClass('alert-warning');
             } else {
                 $("#message").addClass('alert-primary');
-                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-dark');
                 $("#message").removeClass('alert-danger');
-                $("#message").removeClass('alert-success');
+                $("#message").removeClass('alert-warning');
             }
 
         }).fail(function(jqXHR, textStatus) {
@@ -409,8 +409,8 @@
                 sessionStorage.setItem('coyote_token', data);
                 sessionStorage.setItem('coyote_name', $("#name").val());
                 sessionStorage.removeItem('coyote_gm');
-                turnRegex = RegExp('Next, ' + $("#name").val() + "'s'")
-                loseRegex = RegExp('Coyote! ' + $("#name").val() + " loses");
+                turnRegex = RegExp('次は ' + $("#name").val() + " のターンです。");
+                loseRegex = RegExp('コヨーテしました！ ' + $("#name").val() + " の負けです");
                 getGameInfo()
                 $('#staticBackdrop').modal('hide');
             } else {

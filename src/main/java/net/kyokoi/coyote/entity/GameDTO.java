@@ -24,13 +24,13 @@ public class GameDTO {
         this.value = game.getDeclareValue();
         if (game.getGameState() == GameState.Ready) {
             this.players = game.getUsers().stream()
-            .map(user ->  new Player(user.getName(), "# No Card"))
+            .map(user ->  new Player(user.getName(), ""))
             .collect(Collectors.toList());        
         } else if (game.getGameState()  == GameState.Playing) {
             this.players = game.getUsers().stream()
             .map(user ->  {
                 if (token.equals(user.getToken()))
-                    return new Player(user.getName(), "# You can't know");
+                    return new Player(user.getName(), "# 見れません");
                 else
                     return new Player(user.getName(), user.printCardValue());
             })
