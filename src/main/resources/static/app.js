@@ -21,15 +21,17 @@ function sendName() {
     }).then(function(data) {
         if (data) {
             console.log(data)
+            sessionStorage.setItem('coyote_room', data.roomId);
             sessionStorage.setItem('coyote_token', data.users[0].token);
             sessionStorage.setItem('coyote_name', $("#name").val());
+            sessionStorage.setItem('coyote_gm', true);
             console.log(sessionStorage.getItem('coyote_token'))
             const joinUrl = hostname + '/game/' + data.roomId;
             $('a').attr('href', joinUrl);
             location.href = '/game/' + data.roomId;
         } else {
             console.log("You can't join.");
-            $("#message1").text("Name Error")
+            $("#message1").text("名前が入力されていません")
             $("#message1").addClass("alert")
             $("#message1").addClass("alert-danger")
         }
@@ -46,22 +48,24 @@ function join() {
         },
         error: function(e) {
             console.log(e);
-            $("#message2").text("Room ID or Name Error")
+            $("#message2").text("ルームIDが正しくないか、名前が入力されていません")
             $("#message2").addClass("alert")
             $("#message2").addClass("alert-danger")
         }
     }).then(function(data) {
         if (data) {
             console.log(data);
+            sessionStorage.setItem('coyote_room', $("#room_id").val())
             sessionStorage.setItem('coyote_token', data)
             sessionStorage.setItem('coyote_name', $("#enter_name").val());
+            sessionStorage.removeItem('coyote_gm');
             console.log(sessionStorage.getItem('coyote_token'))
             const joinUrl = hostname + '/game/' + $("#room_id").val();
             $('a').attr('href', joinUrl);
             location.href = '/game/' + $("#room_id").val();
         } else {
             console.log("You can't join.");
-            $("#message2").text("Room ID or Name Error")
+            $("#message2").text("ルームIDが正しくないか、名前が入力されていません")
             $("#message2").addClass("alert")
             $("#message2").addClass("alert-danger")
         }

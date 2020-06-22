@@ -34,7 +34,7 @@ public class Game {
         this.roomId = random.nextInt(900000) + 100000;
         this.gameState = GameState.Ready;
         this.users = new ArrayList<>();
-        this.message = "Please wait for host user to start.";
+        this.message = "ゲームマスターがスタートするのを待ってください。";
         this.cardDeck = new CardDeck();
         this.cardDeck.init();
         this.version = 0;
@@ -71,12 +71,12 @@ public class Game {
         
         users.forEach(player -> player.setCard(cardDeck.drawCard()));
         
-        message = "Game Start! Next, " + users.get(turnIndex).getName() + "'s turn. Please raise or coyote.";
+        message = "ゲームスタート！ 次は " + users.get(turnIndex).getName() + " のターンです。「アゲル」か「コヨーテ」をえらんでください。";
     }
 
     public void restartGame() {
         gameState = GameState.Ready;
-        this.message = "Please wait for host user to start.";
+        this.message = "ゲームマスターがスタートするのを待ってください。";
     }
 
 
@@ -93,9 +93,9 @@ public class Game {
         if (value < 1)
             return false;
         this.declareValue += value;
-        message = users.get(turnIndex).getName() + " raised " + Integer.toString(value) + ". ";
+        message = users.get(turnIndex).getName() + " は " + Integer.toString(value) + " こ上げて " + Integer.toString(this.declareValue) + " を宣言しました。";
         turnIndex = getNextTurnIndex(turnIndex);
-        message += "Next, " + users.get(turnIndex).getName() + "'s turn. Please raise or coyote.";
+        message += "次は " + users.get(turnIndex).getName() + " のターンです。「アゲル」か「コヨーテ」をえらんでください。";
         return true;
     }
 
@@ -133,18 +133,18 @@ public class Game {
             cards.forEach(c -> cardDeck.discard(c));
         
         int total = Rule.calculateTotal(cards);
-        message = users.get(turnIndex).getName() + " call Coyote! ";
+        message = users.get(turnIndex).getName() + " はコヨーテしました！ ";
 
         if (total < declareValue) {
-            message += users.get(getPrevTurnIndex(turnIndex)).getName() + " loses... ("
-                    + users.get(getPrevTurnIndex(turnIndex)).getName() + " raised " + Integer.toString(declareValue)
-                    + ". " + "Total is " + Integer.toString(total) + ". )";
+            message += users.get(getPrevTurnIndex(turnIndex)).getName() + " の負けです…… "
+                    + users.get(getPrevTurnIndex(turnIndex)).getName() + " は " + Integer.toString(declareValue)
+                    + " を宣言しました。合計は " + Integer.toString(total) + " でした。";
             turnIndex = getPrevTurnIndex(turnIndex);
             return users.get(getPrevTurnIndex(turnIndex));
         } else {
-            message += users.get(turnIndex).getName() + " loses... (" + users.get(getPrevTurnIndex(turnIndex)).getName()
-                    + " raised " + Integer.toString(declareValue) + ". " + "Total is " + Integer.toString(total)
-                    + ". )";
+            message += users.get(turnIndex).getName() + " の負けです…… " + users.get(getPrevTurnIndex(turnIndex)).getName()
+                    + " は " + Integer.toString(declareValue) + " を宣言しました。合計は " + Integer.toString(total)
+                    + " でした。";
             return users.get(turnIndex);
         }
 

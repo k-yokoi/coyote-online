@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -9,59 +9,70 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <title>Coyote</title>
-    <link href="/main.css" rel="stylesheet">
+    <title>コヨーテ</title>
+    <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', 'Kosugi Maru', sans-serif;
+        }
+        
+        .wf-nicomoji {
+            font-family: "Nico Moji";
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Coyote</h1>
-        <p>Room ID: <span th:text="${roomId}"></span></p>
-        <button id="start" type="button" class="btn btn-outline-primary mb-2">Start</button>
+    <div class="container" style="max-width: 720px">
+        <h1 class="mt-3 wf-nicomoji text-info display-2">コヨーテ</h1>
+        <p>ルームID: <span th:text="${roomId}"></span></p>
+        <button id="start" type="button" class="btn btn-outline-primary mb-2" disabled aria-disabled="true">スタート</button>
         <button id="exit_toggle" type="button" class="btn btn-outline-danger mb-2" data-toggle="modal" data-target="#exampleModal2">
-            Exit
-        </button>
-        <button type="button" class="btn btn-outline-info mb-2 float-right" data-toggle="modal" data-target="#exampleModal3">
-            Info
+            退出
         </button>
 
-        <h2>Declared value</h2>
+        <h2>宣言された数</h2>
         <h3 id="declared_value"></h3>
-        <h2>Message</h2>
+        <h2>メッセージ</h2>
         <div id="message" class="alert alert-primary" role="alert"></div>
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Player</th>
-                    <th scope="col">Card</th>
+                    <th scope="col">プレイヤー</th>
+                    <th scope="col">カード</th>
                 </tr>
             </thead>
             <tbody id="players"></tbody>
         </table>
 
         <button id="raise" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#exampleModal">
-                Raise
+                アゲル
             </button>
-        <button id="coyote" class="btn btn-warning btn-lg" type="submit">Coyote</button>
+        <button id="coyote" class="btn btn-warning btn-lg" type="submit">コヨーテ</button>
+
+        <button type="button" class="btn btn-outline-info btn-lg float-right" data-toggle="modal" data-target="#exampleModal3">
+            ？
+        </button>
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">How much do you raise?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">いくつ上げますか？</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body px-5">
                         <input type="range" class="form-control-range" id="formControlRange" value=1 min="1" max="20" step="1">
                         <input type="number" class="form-control" id="raise_value" value="1" min="1">
                         <div id="display"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="raise_execute" type="button" class="btn btn-primary">Raise</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">とじる</button>
+                        <button id="raise_execute" type="button" class="btn btn-primary">アゲル</button>
                     </div>
                 </div>
             </div>
@@ -72,7 +83,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Join Room</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">ルームに入る</h5>
                         <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -80,14 +91,14 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="name">What is your name?</label>
-                                <input type="text" class="form-control" id="name" placeholder="Your name here...">
+                                <label for="name">名前</label>
+                                <input type="text" class="form-control" id="name" placeholder="">
                             </div>
                         </form>
                         <div id="message2" role="alert"></div>
                     </div>
                     <div class="modal-footer">
-                        <button id="join" type="button" class="btn btn-primary">Join</button>
+                        <button id="join" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
@@ -98,17 +109,17 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Do you want to Exit?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel2">本当に退出しますか？</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Once you exit, you can't go back this room.
+                        一度退出すると、このゲームに戻ってこれません。本当に退出していいですか？
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button id="exit" type="button" class="btn btn-danger">Yes, EXIT</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">もどる</button>
+                        <button id="exit" type="button" class="btn btn-danger">はい。退出します</button>
                     </div>
                 </div>
             </div>
@@ -119,89 +130,177 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel3">Card Info</h5>
+                        <h5 class="modal-title" id="exampleModalLabel3">カードの枚数</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-striped table-sm text-center">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Card</th>
-                                    <th scope="col">Quantity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">20</th>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">15</th>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">10</th>
-                                    <td>3</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1 ~ 5</th>
-                                    <td>4</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">0</th>
-                                    <td>3</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">0 (Night)</th>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">-5</th>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">-10</th>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">x2</th>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Max->0</th>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">?</th>
-                                    <td>1</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">OK</button>
+                        <div class="card mx-sm-5">
+                            <div class="card-body">
+                                <strong class="text-center">
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        20
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        15
+                                    </div>
+                                    <div class="col">
+                                        15
+                                    </div>
+                                </div>
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        10
+                                    </div>
+                                    <div class="col">
+                                        10
+                                    </div>
+                                    <div class="col">
+                                        10
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        5
+                                    </div>
+                                    <div class="col">
+                                        5
+                                    </div>
+                                    <div class="col">
+                                        5
+                                    </div>
+                                    <div class="col">
+                                        5
+                                    </div>
+                                </div>
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        4
+                                    </div>
+                                    <div class="col">
+                                        4
+                                    </div>
+                                    <div class="col">
+                                        4
+                                    </div>
+                                    <div class="col">
+                                        4
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        3
+                                    </div>
+                                    <div class="col">
+                                        3
+                                    </div>
+                                    <div class="col">
+                                        3
+                                    </div>
+                                    <div class="col">
+                                        3
+                                    </div>
+                                </div>
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        2
+                                    </div>
+                                    <div class="col">
+                                        2
+                                    </div>
+                                    <div class="col">
+                                        2
+                                    </div>
+                                    <div class="col">
+                                        2
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        1
+                                    </div>
+                                    <div class="col">
+                                        1
+                                    </div>
+                                    <div class="col">
+                                        1
+                                    </div>
+                                    <div class="col">
+                                        1
+                                    </div>
+                                </div>
+
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        0
+                                    </div>
+                                    <div class="col">
+                                        0
+                                    </div>
+                                    <div class="col">
+                                        0
+                                    </div>
+                                    <div class="col text-white bg-dark">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        -5
+                                    </div>
+                                    <div class="col">
+                                        -5
+                                    </div>
+                                </div>
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        -10
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        x2
+                                    </div>
+                                </div>
+                                <div class="row bg-light">
+                                    <div class="col">
+                                        Max->0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        ?
+                                    </div>
+                                </div>
+                            </strong>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info" data-dismiss="modal">OK</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
 <script type="text/javascript" th:inline="javascript">
     const roomId = /*[[${roomId}]]*/
-        let turnRegex = RegExp('Next, ' + sessionStorage.getItem('coyote_name') + "'s");
-    let loseRegex = RegExp('Coyote! ' + sessionStorage.getItem('coyote_name') + " loses");
-    const coyoteRegex = RegExp('Coyote!');
+        let turnRegex = RegExp('次は ' + sessionStorage.getItem('coyote_name') + " のターンです。");
+    let loseRegex = RegExp('コヨーテしました！ ' + sessionStorage.getItem('coyote_name') + " の負けです");
+    const coyoteRegex = RegExp('コヨーテしました！');
 
 
-    if (sessionStorage.getItem('coyote_token') == null) {
+    if (sessionStorage.getItem('coyote_room') != roomId) {
         $('#staticBackdrop').modal('show')
     }
 
@@ -248,15 +347,11 @@
                 $("#start").prop("disabled", true);
                 $("#exit_toggle").prop("disabled", true);
                 $("#raise_value").prop("disabled", false);
-                $("#raise").prop("disabled", false);
-                $("#coyote").prop("disabled", false);
             } else {
                 $('#is_playing').text("Waiting")
-                $("#start").prop("disabled", false);
+                $("#start").prop("disabled", !sessionStorage.getItem('coyote_gm'));
                 $("#exit_toggle").prop("disabled", false);
                 $("#raise_value").prop("disabled", true);
-                $("#raise").prop("disabled", true);
-                $("#coyote").prop("disabled", true);
             }
             $('#players').children().remove();
             $.each(data.players, function(i, val) {
@@ -266,25 +361,32 @@
             $("#declared_value").text(data.value); //html要素変更する
             $("#message").text(data.message); //html要素変更する
             if (turnRegex.test(data.message)) {
+                $("#raise").prop("disabled", false);
+                $("#coyote").prop("disabled", false);
+            } else {
+                $("#raise").prop("disabled", true);
+                $("#coyote").prop("disabled", true);
+            }
+            if (turnRegex.test(data.message)) {
                 $("#message").removeClass('alert-primary');
-                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-dark');
                 $("#message").addClass('alert-danger');
-                $("#message").removeClass('alert-success');
+                $("#message").removeClass('alert-warning');
             } else if (loseRegex.test(data.message)) {
                 $("#message").removeClass('alert-primary');
-                $("#message").addClass('alert-warning');
+                $("#message").addClass('alert-dark');
                 $("#message").removeClass('alert-danger');
-                $("#message").removeClass('alert-success');
+                $("#message").removeClass('alert-warning');
             } else if (coyoteRegex.test(data.message)) {
                 $("#message").removeClass('alert-primary');
-                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-dark');
                 $("#message").removeClass('alert-danger');
-                $("#message").addClass('alert-success');
+                $("#message").addClass('alert-warning');
             } else {
                 $("#message").addClass('alert-primary');
-                $("#message").removeClass('alert-warning');
+                $("#message").removeClass('alert-dark');
                 $("#message").removeClass('alert-danger');
-                $("#message").removeClass('alert-success');
+                $("#message").removeClass('alert-warning');
             }
 
         }).fail(function(jqXHR, textStatus) {
@@ -313,10 +415,13 @@
         }).then(function(data) {
             if (data) {
                 console.log(data);
+                sessionStorage.setItem('coyote_room', roomId);
                 sessionStorage.setItem('coyote_token', data);
                 sessionStorage.setItem('coyote_name', $("#name").val());
-                turnRegex = RegExp('Next, ' + $("#name").val() + "'s'")
-                loseRegex = RegExp('Coyote! ' + $("#name").val() + " loses");
+                sessionStorage.removeItem('coyote_gm');
+                turnRegex = RegExp('次は ' + $("#name").val() + " のターンです。");
+                loseRegex = RegExp('コヨーテしました！ ' + $("#name").val() + " の負けです");
+                getGameInfo()
                 $('#staticBackdrop').modal('hide');
             } else {
                 console.log("You can't join.");
@@ -329,8 +434,10 @@
 
     function exit() {
         console.log('exit')
-        sessionStorage.removeItem('coyote_token')
+        sessionStorage.removeItem('coyote_room');
+        sessionStorage.removeItem('coyote_token');
         sessionStorage.removeItem('coyote_name');
+        sessionStorage.removeItem('coyote_gm');
         location.href = '/'
     }
 
@@ -343,6 +450,7 @@
             }
         }).then(function(data) {
             console.log(data);
+            getGameInfo()
         });
     }
 
@@ -358,6 +466,7 @@
             console.log(data);
             $("#raise_value").val(1);
             $("#formControlRange").val(1);
+            getGameInfo()
         });
         $('#exampleModal').modal('hide');
     }
@@ -371,6 +480,7 @@
             }
         }).then(function(data) {
             console.log(data);
+            getGameInfo()
         });
     }
     $(function() {

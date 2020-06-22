@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html lang="ja">
 <html>
 
 <head>
@@ -9,25 +9,35 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <title>Coyote</title>
-    <link href="/main.css" rel="stylesheet">
+    <title>コヨーテ</title>
+    <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', 'Kosugi Maru', sans-serif;
+        }
+        
+        .wf-nicomoji {
+            font-family: "Nico Moji";
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <div class="text-center">
-            <h1>Coyote</h1>
-            <form>
+            <h1 class="my-5 wf-nicomoji text-info display-1">コヨーテ</h1>
+            <form class="mt-5">
                 <div class="form-group">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal1">
-                Create Room
+                ルームを作る
             </button>
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal2">
-                Enter Room
+                ルームに入る
             </button>
                 </div>
             </form>
@@ -38,7 +48,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Create Room</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">ルームを作る</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -46,15 +56,15 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="name">What is your name?</label>
-                                <input type="text" class="form-control" id="name" placeholder="Your name here...">
+                                <label for="name">名前</label>
+                                <input type="text" class="form-control" id="name" placeholder="">
                             </div>
                         </form>
                         <div id="message1" role="alert"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="send" type="button" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">とじる</button>
+                        <button id="send" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
@@ -65,7 +75,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Enter Room</h5>
+                        <h5 class="modal-title" id="exampleModalLabel2">ルームに入る</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -73,19 +83,19 @@
                     <div class="modal-body">
                         <form class="form">
                             <div class="form-group">
-                                <label for="name">What is Room ID?</label>
-                                <input type="text" class="form-control" id="room_id" placeholder="Room ID here...">
+                                <label for="name">ルームID</label>
+                                <input type="text" class="form-control" id="room_id" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="name">What is your Name</label>
-                                <input type="text" class="form-control" id="enter_name" placeholder="Your name here...">
+                                <label for="name">名前</label>
+                                <input type="text" class="form-control" id="enter_name" placeholder="">
                             </div>
                         </form>
                         <div id="message2" role="alert"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="join" type="button" class="btn btn-primary">Join</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">とじる</button>
+                        <button id="join" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
