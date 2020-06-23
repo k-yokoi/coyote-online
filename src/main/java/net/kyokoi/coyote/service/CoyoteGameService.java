@@ -13,13 +13,17 @@ public class CoyoteGameService {
     @Autowired
     GameRepository gameRepository;
 
+    @Autowired
+    PushWebSocketService pushWebSocketService;
+
     public User coyote(int roomId, UUID token) {
         Game game = gameRepository.findByRoomId(roomId).get(0);
         if (!game.canRaiseOrCoyote(token))
             return null;
         User loosePlayer = game.coyote(token);
-        game.incrementVersion();
         gameRepository.save(game);
+        pushWebSocketService.sendMessage(roomId, "coyote");
+
         return loosePlayer;
     }
 }

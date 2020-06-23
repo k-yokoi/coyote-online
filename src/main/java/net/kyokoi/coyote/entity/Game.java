@@ -25,6 +25,7 @@ public class Game {
     private int turnIndex;
     @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     private CardDeck cardDeck;
+    @Version
     private int version;
     @Transient
     public static final int MAX_USERS = 12;
