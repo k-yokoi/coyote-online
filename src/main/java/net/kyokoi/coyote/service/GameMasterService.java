@@ -18,6 +18,9 @@ public class GameMasterService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    PushWebSocketService pushWebSocketService;
+
     public boolean startGame(int roomId, UUID token) {
         User user = userRepository.findByToken(token).get(0);
         if (user.getRoomId() != roomId || !user.isAdmin())
@@ -30,8 +33,8 @@ public class GameMasterService {
             e.printStackTrace();;
             return false;
         }
-        game.incrementVersion();
         gameRepository.saveAndFlush(game);
+        pushWebSocketService.sendMessage(roomId, "start");
         return true;
 
     }
@@ -43,8 +46,8 @@ public class GameMasterService {
 
         Game game = gameRepository.findByRoomId(roomId).get(0);
         game.restartGame();
-        game.incrementVersion();
         gameRepository.saveAndFlush(game);
+        pushWebSocketService.sendMessage(roomId, "restart");
         return true;
     }
 }

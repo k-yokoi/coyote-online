@@ -12,13 +12,16 @@ public class RaiseGameService {
     @Autowired
     GameRepository gameRepository;
 
+    @Autowired
+    PushWebSocketService pushWebSocketService;
+
     public boolean raise(int roomId, int value, UUID token) {
         Game game = gameRepository.findByRoomId(roomId).get(0);
         if (!game.canRaiseOrCoyote(token))
             return false;
         game.raise(value, token);
-        game.incrementVersion();
         gameRepository.save(game);
+        pushWebSocketService.sendMessage(roomId, "raise");
 
         return true;
     }
